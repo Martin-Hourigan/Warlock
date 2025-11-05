@@ -43,7 +43,7 @@ namespace Warlock
 
         private static RLRootConsole _rootConsole;
 
-        public static Player Player { get; private set; }
+        public static Player Player { get; set; }
 
         public static DungeonMap DungeonMap { get; private set; }
 
@@ -75,9 +75,7 @@ namespace Warlock
             _rootConsole.Update += OnRootConsoleUpdate;
             // Set up a handler for RLNET's Render event
             _rootConsole.Render += OnRootConsoleRender;
-
-            Player = new Player();
-
+                        
             CommandSystem = new CommandSystem();
 
             MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
