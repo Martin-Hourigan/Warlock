@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RLNET;
+using RogueSharp.Random;
 using Warlock.Core;
 using Warlock.Systems;
 
@@ -46,12 +47,22 @@ namespace Warlock
 
         public static DungeonMap DungeonMap { get; private set; }
 
+        // Singleton of IRandom used throughout the game when generating random numbers
+        public static IRandom Random { get; private set; }
+
         public static void Main()
         {
+            // Establish the seed for the random number generator from the current time
+            int seed = (int)DateTime.UtcNow.Ticks;
+            Random = new DotNetRandom(seed);
+
             // This must be the exact name of the bitmap font file we are using or it will error.
             string fontFileName = "terminal8x8.png";
+
             // The title will appear at the top of the console window
-            string consoleTitle = "Warlock - Level 1";
+            // also include the seed used to generate the level
+            string consoleTitle = $"Warlock - Level 1 - Seed {seed}";
+
             // Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
               8, 8, 1f, consoleTitle);
@@ -69,7 +80,7 @@ namespace Warlock
 
             CommandSystem = new CommandSystem();
 
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
             DungeonMap = mapGenerator.CreateMap();
 
             // These messages are here to describe what area of the screen are being rendered
