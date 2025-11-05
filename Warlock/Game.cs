@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RLNET;
 using Warlock.Core;
+using Warlock.Systems;
 
 namespace Warlock
 {
@@ -36,6 +37,10 @@ namespace Warlock
 
         private static RLRootConsole _rootConsole;
 
+        public static Player Player { get; private set; }
+
+        public static DungeonMap DungeonMap { get; private set; }
+
         public static void Main()
         {
             // This must be the exact name of the bitmap font file we are using or it will error.
@@ -54,6 +59,14 @@ namespace Warlock
             _rootConsole.Update += OnRootConsoleUpdate;
             // Set up a handler for RLNET's Render event
             _rootConsole.Render += OnRootConsoleRender;
+
+            Player = new Player();
+
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight);
+            DungeonMap = mapGenerator.CreateMap();
+
+            DungeonMap.UpdatePlayerFieldOfView();
+
             // Begin RLNET's game loop
             _rootConsole.Run();
         }
@@ -62,7 +75,7 @@ namespace Warlock
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
             _mapConsole.SetBackColor(0, 0, _mapWidth, _mapHeight, Colors.FloorBackground);
-            _mapConsole.Print(1, 1, "Map", Colors.TextHeading);
+            DungeonMap.Draw(_mapConsole);
 
             _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater);
             _messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
@@ -77,6 +90,7 @@ namespace Warlock
         // Event handler for RLNET's Render event
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
+            Player.Draw(_mapConsole, DungeonMap);
             // Blit the sub consoles to the root console in the correct locations
             RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight,
               _rootConsole, 0, _inventoryHeight);
@@ -86,6 +100,7 @@ namespace Warlock
               _rootConsole, 0, _screenHeight - _messageHeight);
             RLConsole.Blit(_inventoryConsole, 0, 0, _inventoryWidth, _inventoryHeight,
               _rootConsole, 0, 0);
+
 
             // Tell RLNET to draw the console that we set
             _rootConsole.Draw();
