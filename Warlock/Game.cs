@@ -47,6 +47,10 @@ namespace Warlock
 
         public static DungeonMap DungeonMap { get; private set; }
 
+        public static MessageLog MessageLog { get; private set; }
+        // Temporary member variable just to show our MessageLog is working
+        private static int _steps = 0;
+
         // Singleton of IRandom used throughout the game when generating random numbers
         public static IRandom Random { get; private set; }
 
@@ -81,9 +85,14 @@ namespace Warlock
             MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
             DungeonMap = mapGenerator.CreateMap();
 
+            // Create a new MessageLog and print the random seed used to generate the level
+            MessageLog = new MessageLog();
+            MessageLog.Add("The rogue arrives on level 1");
+            MessageLog.Add($"Level created with seed '{seed}'");
+
             // These messages are here to describe what area of the screen are being rendered
-            _messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater);
-            _messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
+            //_messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater);
+            //_messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
             _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, Palette.DbOldStone);
             _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
             _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood);
@@ -129,6 +138,8 @@ namespace Warlock
 
             if (didPlayerAct)
             {
+                // Every time the player acts increment the steps and log it
+                MessageLog.Add($"Step # {++_steps}");
                 _renderRequired = true;
             }
 
@@ -141,6 +152,9 @@ namespace Warlock
             if (_renderRequired)
             {
                 DungeonMap.Draw(_mapConsole);
+
+                MessageLog.Draw(_messageConsole);
+
                 Player.Draw(_mapConsole, DungeonMap);
 
                 // Blit the sub consoles to the root console in the correct locations
