@@ -48,8 +48,9 @@ namespace Warlock
         public static DungeonMap DungeonMap { get; private set; }
 
         public static MessageLog MessageLog { get; private set; }
+
         // Temporary member variable just to show our MessageLog is working
-        private static int _steps = 0;
+        //private static int _steps = 0;
 
         // Singleton of IRandom used throughout the game when generating random numbers
         public static IRandom Random { get; private set; }
@@ -93,8 +94,8 @@ namespace Warlock
             // These messages are here to describe what area of the screen are being rendered
             //_messageConsole.SetBackColor(0, 0, _messageWidth, _messageHeight, Palette.DbDeepWater);
             //_messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
-            _statConsole.SetBackColor(0, 0, _statWidth, _statHeight, Palette.DbOldStone);
-            _statConsole.Print(1, 1, "Stats", Colors.TextHeading);
+            //_statConsole.SetBackColor(0, 0, _statWidth, _statHeight, Palette.DbOldStone);
+            //_statConsole.Print(1, 1, "Stats", Colors.TextHeading);
             _inventoryConsole.SetBackColor(0, 0, _inventoryWidth, _inventoryHeight, Palette.DbWood);
             _inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
@@ -138,9 +139,7 @@ namespace Warlock
 
             if (didPlayerAct)
             {
-                // Every time the player acts increment the steps and log it
-                MessageLog.Add($"Step # {++_steps}");
-                _renderRequired = true;
+                
             }
 
         }
@@ -156,6 +155,8 @@ namespace Warlock
                 MessageLog.Draw(_messageConsole);
 
                 Player.Draw(_mapConsole, DungeonMap);
+
+                Player.DrawStats(_statConsole);
 
                 // Blit the sub consoles to the root console in the correct locations
                 RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight, _rootConsole, 0, _inventoryHeight);
