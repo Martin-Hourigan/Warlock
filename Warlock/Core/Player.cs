@@ -23,6 +23,8 @@ namespace Warlock.Core
             Name = "Warlock";
             Speed = 10;
             Symbol = '@';
+            X = 10;
+            Y = 10;
         }
 
         public void DrawStats(RLConsole statConsole)

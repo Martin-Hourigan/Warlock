@@ -26,5 +26,8 @@ namespace Warlock.Core
         public static RLColor TextHeading = RLColor.White;
         public static RLColor Text = Palette.DbLight;
         public static RLColor Gold = Palette.DbSun;
+
+        //Colours for Monsters
+        public static RLColor KoboldColor = Palette.DbBrightWood;
     }
 }
