@@ -62,13 +62,7 @@ namespace Warlock.Systems
                     _map.Rooms.Add(newRoom);
                 }
             }
-            // Iterate through each room that we wanted placed 
-            // call CreateRoom to make it
-            foreach (Rectangle room in _map.Rooms)
-            {
-                CreateRoom(room);
-                CreateDoors(room);
-            }
+            
 
             // Iterate through each room that was generated
             // Don't do anything with the first room, so start at r = 1 instead of r = 0
@@ -91,6 +85,14 @@ namespace Warlock.Systems
                     CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, previousRoomCenterX);
                     CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
                 }
+            }
+
+            // Iterate through each room that we wanted placed 
+            // call CreateRoom to make it
+            foreach (Rectangle room in _map.Rooms)
+            {
+                CreateRoom(room);
+                CreateDoors(room);
             }
 
             PlacePlayer();

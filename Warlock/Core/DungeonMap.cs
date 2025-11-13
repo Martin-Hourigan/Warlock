@@ -10,8 +10,7 @@ namespace Warlock.Core
 {
     public class DungeonMap : Map
     {
-        public List<Rectangle> Rooms;
-
+        public List<Rectangle> Rooms { get; set; }
         public List<Door> Doors { get; set; }
 
         private readonly List<Monster> _monsters;
@@ -40,6 +39,11 @@ namespace Warlock.Core
                 monster.Draw(mapConsole, this);
             }
 
+            foreach (Door door in Doors)
+            {
+                door.Draw(mapConsole, this);
+            }
+
             // Keep an index so we know which position to draw monster stats at
             int i = 0;
 
@@ -54,12 +58,7 @@ namespace Warlock.Core
                     monster.DrawStats(statConsole, i);
                     i++;
                 }
-            }
-
-            foreach (Door door in Doors)
-            {
-                door.Draw(mapConsole, this);
-            }
+            }            
         }
 
         // This method will be called any time we move the player to update field-of-view
