@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Warlock.Behaviours;
+using Warlock.Systems;
 
 namespace Warlock.Core
 {
@@ -28,6 +30,15 @@ namespace Warlock.Core
 
             // Print the monsters name over top of the health bar
             statConsole.Print(2, yPosition, $": {Name}", Palette.DbLight);
+
+
+        }
+        public int? TurnsAlerted { get; set; }
+
+        public virtual void PerformAction(CommandSystem commandSystem)
+        {
+            var behavior = new StandardMoveAndAttack();
+            behavior.Act(this, commandSystem);
         }
     }
 }

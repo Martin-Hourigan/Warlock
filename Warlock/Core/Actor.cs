@@ -9,7 +9,7 @@ using Warlock.Interfaces;
 
 namespace Warlock.Core
 {
-    public class Actor : IActor, IDrawable
+    public class Actor : IActor, IDrawable, IScheduleable
     {
         // IActor
         private int _attack;
@@ -108,5 +108,15 @@ namespace Warlock.Core
                 console.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
             }
         }
+
+        // IScheduleable
+        public int Time
+        {
+            get
+            {
+                return Speed;
+            }
+        }
+
     }
 }
