@@ -19,15 +19,21 @@ namespace Warlock.Core
         public static RLColor WallBackgroundFov = Palette.SecondaryDarker;
         public static RLColor WallFov = Palette.SecondaryLighter;
 
-        //public static RLColor TextHeading = Palette.DbLight;
-
-        public static RLColor Player = Palette.DbLight;
-
+        public static RLColor DoorBackground = Palette.ComplimentDarkest;
+        public static RLColor Door = Palette.ComplimentLighter;
+        public static RLColor DoorBackgroundFov = Palette.ComplimentDarker;
+        public static RLColor DoorFov = Palette.ComplimentLightest;
+        
         public static RLColor TextHeading = RLColor.White;
         public static RLColor Text = Palette.DbLight;
         public static RLColor Gold = Palette.DbSun;
 
+        // Player
+        public static RLColor Player = Palette.DbLight;
+
         //Colours for Monsters
         public static RLColor KoboldColor = Palette.DbBrightWood;
+
+
     }
 }

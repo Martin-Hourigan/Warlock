@@ -12,6 +12,8 @@ namespace Warlock.Core
     {
         public List<Rectangle> Rooms;
 
+        public List<Door> Doors { get; set; }
+
         private readonly List<Monster> _monsters;
 
         public DungeonMap()
@@ -19,6 +21,7 @@ namespace Warlock.Core
             // Initialize the list of rooms when we create a new DungeonMap
             Rooms = new List<Rectangle>();
             _monsters = new List<Monster>();
+            Doors = new List<Door>();
         }
 
         // The Draw method will be called each time the map is updated
@@ -51,6 +54,11 @@ namespace Warlock.Core
                     monster.DrawStats(statConsole, i);
                     i++;
                 }
+            }
+
+            foreach (Door door in Doors)
+            {
+                door.Draw(mapConsole, this);
             }
         }
 
@@ -119,6 +127,10 @@ namespace Warlock.Core
                 actor.Y = y;
                 // The new cell the actor is on is now not walkable
                 SetIsWalkable(actor.X, actor.Y, false);
+
+                // Try to open a door if one exists here
+                OpenDoor(actor, x, y);
+
                 // Don't forget to update the field of view if we just repositioned the player
                 if (actor is Player)
                 {
@@ -200,6 +212,27 @@ namespace Warlock.Core
                 }
             }
             return false;
+        }
+
+        // Return the door at the x,y position or null if one is not found.
+        public Door GetDoor(int x, int y)
+        {
+            return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
+        }
+
+        // The actor opens the door located at the x,y position
+        private void OpenDoor(Actor actor, int x, int y)
+        {
+            Door door = GetDoor(x, y);
+            if (door != null && !door.IsOpen)
+            {
+                door.IsOpen = true;
+                var cell = GetCell(x, y);
+                // Once the door is opened it should be marked as transparent and no longer block field-of-view
+                SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
+
+                Game.MessageLog.Add($"{actor.Name} opened a door");
+            }
         }
     }
 }
