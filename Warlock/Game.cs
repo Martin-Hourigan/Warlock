@@ -47,6 +47,8 @@ namespace Warlock
 
         public static DungeonMap DungeonMap { get; private set; }
 
+        private static int _mapLevel = 1;
+
         public static MessageLog MessageLog { get; private set; }
 
         // Temporary member variable just to show our MessageLog is working
@@ -68,7 +70,7 @@ namespace Warlock
 
             // The title will appear at the top of the console window
             // also include the seed used to generate the level
-            string consoleTitle = $"Warlock - Level 1 - Seed {seed}";
+            string consoleTitle = $"Warlock - Level {_mapLevel} - Seed {seed}";
 
             // Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
             _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
@@ -87,7 +89,7 @@ namespace Warlock
 
             SchedulingSystem = new SchedulingSystem();
 
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, _mapLevel);
             DungeonMap = mapGenerator.CreateMap();
 
             // Create a new MessageLog and print the random seed used to generate the level
@@ -138,6 +140,18 @@ namespace Warlock
                     else if (keyPress.Key == RLKey.Escape)
                     {
                         _rootConsole.Close();
+                    }
+                    else if (keyPress.Key == RLKey.Period)
+                    {
+                        if (DungeonMap.CanMoveDownToNextLevel())
+                        {
+                            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, ++_mapLevel);
+                            DungeonMap = mapGenerator.CreateMap();
+                            MessageLog = new MessageLog();
+                            CommandSystem = new CommandSystem();
+                            _rootConsole.Title = $"RougeSharp RLNet Tutorial - Level {_mapLevel}";
+                            didPlayerAct = true;
+                        }
                     }
                 }
 

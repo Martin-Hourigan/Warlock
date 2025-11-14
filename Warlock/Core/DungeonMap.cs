@@ -12,11 +12,15 @@ namespace Warlock.Core
     {
         public List<Rectangle> Rooms { get; set; }
         public List<Door> Doors { get; set; }
+        public Stairs StairsUp { get; set; }
+        public Stairs StairsDown { get; set; }
 
         private readonly List<Monster> _monsters;
 
         public DungeonMap()
         {
+            Game.SchedulingSystem.Clear();
+
             // Initialize the list of rooms when we create a new DungeonMap
             Rooms = new List<Rectangle>();
             _monsters = new List<Monster>();
@@ -43,6 +47,9 @@ namespace Warlock.Core
             {
                 door.Draw(mapConsole, this);
             }
+
+            StairsUp.Draw(mapConsole, this);
+            StairsDown.Draw(mapConsole, this);
 
             // Keep an index so we know which position to draw monster stats at
             int i = 0;
@@ -232,6 +239,12 @@ namespace Warlock.Core
 
                 Game.MessageLog.Add($"{actor.Name} opened a door");
             }
+        }
+
+        public bool CanMoveDownToNextLevel()
+        {
+            Player player = Game.Player;
+            return StairsDown.X == player.X && StairsDown.Y == player.Y;
         }
     }
 }
